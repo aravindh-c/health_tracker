@@ -29,7 +29,8 @@ class HistoryFragment : Fragment() {
                 @Suppress("UNCHECKED_CAST")
                 return HistoryViewModel(
                     userId = activity.userId,
-                    securePrefs = SecurePrefs(requireContext())
+                    securePrefs = SecurePrefs(requireContext()),
+                    context = requireContext()
                 ) as T
             }
         }

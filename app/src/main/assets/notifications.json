@@ -1,0 +1,102 @@
+{
+  "morning_motivation": [
+    "{name}, start today strong. Your goals are waiting.",
+    "{name}, discipline this morning fuels your transformation.",
+    "{name}, consistency today builds a stronger you.",
+    "{name}, a healthy morning creates a powerful day.",
+    "{name}, rise and choose health today.",
+    "{name}, every great day starts with a healthy choice.",
+    "{name}, your best version begins this morning.",
+    "{name}, make today's meals count. Start now.",
+    "{name}, health is built one morning at a time.",
+    "{name}, today's discipline is tomorrow's reward."
+  ],
+  "meal_reminders": [
+    "{name}, log your meal now. Stay accountable.",
+    "{name}, track your lunch. Awareness builds discipline.",
+    "{name}, log breakfast before eating. Small habits matter.",
+    "{name}, your future self thanks you for logging.",
+    "{name}, consistency starts with logging today's meals.",
+    "{name}, one logged meal at a time. Keep going.",
+    "{name}, stay mindful. Log what you eat today.",
+    "{name}, awareness is the first step to better health.",
+    "{name}, don't forget to log your meal today.",
+    "{name}, log now. Your health goals depend on it."
+  ],
+  "snack_discipline": [
+    "{name}, choose strength over cravings this evening.",
+    "{name}, snack wisely. Choose roasted channa over junk.",
+    "{name}, one smart snack keeps your progress alive.",
+    "{name}, the evening test is here. Choose discipline.",
+    "{name}, stay strong. Goals matter more than cravings.",
+    "{name}, this snack choice defines your progress today.",
+    "{name}, fruits or nuts? Your body will thank you.",
+    "{name}, healthy snacking now protects tomorrow's progress.",
+    "{name}, make the disciplined choice. You can do it.",
+    "{name}, snack time is discipline time. Choose wisely."
+  ],
+  "evening_reflection": [
+    "{name}, reflect on today's meals. Progress matters.",
+    "{name}, every healthy decision today adds up.",
+    "{name}, today's discipline builds tomorrow's strength.",
+    "{name}, keep moving forward. You're doing well.",
+    "{name}, a great day of logging. Rest well.",
+    "{name}, consistency over weeks changes everything.",
+    "{name}, how was your nutrition today? Reflect and improve.",
+    "{name}, small wins every day build lasting health.",
+    "{name}, your body thanks you for today's choices.",
+    "{name}, another day closer to your health goals."
+  ],
+  "family_motivation": [
+    "{name}, {child_name} needs a strong, healthy parent.",
+    "{name}, be the role model {child_name} looks up to.",
+    "{name}, your health inspires {child_name}'s future.",
+    "{name}, {spouse_name} and {child_name} believe in you.",
+    "{name}, a healthy parent creates a happy family.",
+    "{name}, {child_name} is watching. Choose strength today.",
+    "{name}, your family's happiness starts with your health.",
+    "{name}, stay disciplined for {child_name} today.",
+    "{name}, lead by example. {child_name} learns from you.",
+    "{name}, {spouse_name} is proud of your progress today."
+  ],
+  "popup_positive": [
+    "Great choice, {name}! Keep this momentum going.",
+    "Nice logging, {name}! Awareness builds strong habits.",
+    "Good job, {name}! Your discipline is paying off.",
+    "Excellent meal, {name}! Keep this up today.",
+    "Well done, {name}! Your progress is showing.",
+    "Nice work, {name}! One step closer to your goals.",
+    "Great meal, {name}! Balanced and healthy. Keep going.",
+    "Impressive, {name}! Your consistency is building results."
+  ],
+  "popup_correction": [
+    "{name}, consider lighter choices in the next meal.",
+    "No worries, {name}. Balance it with dinner tonight.",
+    "{name}, try adding vegetables to your next meal.",
+    "{name}, a lighter dinner will balance this out.",
+    "{name}, note the calories. Adjust the next meal.",
+    "{name}, still on track. Choose wisely next time.",
+    "That's okay, {name}. Lighter dinner keeps you on track.",
+    "{name}, one meal won't break progress. Stay disciplined."
+  ],
+  "popup_protein_low": [
+    "{name}, protein looks low. Add eggs or paneer.",
+    "{name}, consider a protein-rich snack next.",
+    "{name}, boost protein with curd or boiled eggs.",
+    "{name}, fish or chicken at dinner would help.",
+    "{name}, your protein is low. Choose wisely next.",
+    "{name}, add a protein source in the next meal.",
+    "{name}, legumes or eggs will fix protein today.",
+    "{name}, hit your protein target with the next meal."
+  ],
+  "popup_encouragement": [
+    "{name}, every entry builds your healthy lifestyle.",
+    "{name}, small progress every day wins.",
+    "{name}, your future self appreciates this discipline.",
+    "{name}, one step closer to your health goals.",
+    "{name}, stay consistent. Results are coming.",
+    "{name}, logging today keeps you on the right path.",
+    "{name}, great habit. Keep tracking every meal.",
+    "{name}, discipline today creates the results you want."
+  ]
+}

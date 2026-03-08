@@ -64,4 +64,13 @@ dependencies {
 
     // Encrypted Shared Preferences
     implementation("androidx.security:security-crypto:1.1.0-alpha06")
+
+    // Biometric authentication
+    implementation("androidx.biometric:biometric:1.1.0")
+
+    // Charts
+    implementation("com.github.PhilJay:MPAndroidChart:v3.1.0")
+
+    // WorkManager for scheduled notifications
+    implementation("androidx.work:work-runtime-ktx:2.9.0")
 }

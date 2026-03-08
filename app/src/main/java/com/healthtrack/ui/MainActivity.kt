@@ -1,16 +1,24 @@
 package com.healthtrack.ui
 
+import android.Manifest
+import android.content.pm.PackageManager
+import android.os.Build
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.ContextCompat
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.setupActionBarWithNavController
 import androidx.navigation.ui.setupWithNavController
 import com.healthtrack.R
 import com.healthtrack.databinding.ActivityMainBinding
+import com.healthtrack.utils.NotificationHelper
+import com.healthtrack.utils.SecurePrefs
 import com.healthtrack.utils.UserProfileManager
+import com.healthtrack.workers.NotificationScheduler
 
 class MainActivity : AppCompatActivity() {
 
@@ -21,12 +29,21 @@ class MainActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMainBinding
     lateinit var userId: String
 
+    private val notificationPermissionLauncher = registerForActivityResult(
+        ActivityResultContracts.RequestPermission()
+    ) { granted ->
+        if (granted) NotificationScheduler.scheduleAll(this)
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
         userId = intent.getStringExtra(EXTRA_USER_ID) ?: "aravindh"
+
+        // Remember who is active (used by notification worker to personalise messages)
+        SecurePrefs(this).lastActiveUserId = userId
 
         val profileManager = UserProfileManager(this)
         val profile = profileManager.getProfile(userId)
@@ -41,6 +58,23 @@ class MainActivity : AppCompatActivity() {
         )
         setupActionBarWithNavController(navController, appBarConfig)
         binding.bottomNav.setupWithNavController(navController)
+
+        // Create notification channel and schedule daily reminders
+        NotificationHelper(this).createChannel()
+        setupNotifications()
+    }
+
+    private fun setupNotifications() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            // Android 13+: request POST_NOTIFICATIONS permission if not granted
+            if (ContextCompat.checkSelfPermission(this, Manifest.permission.POST_NOTIFICATIONS)
+                != PackageManager.PERMISSION_GRANTED) {
+                notificationPermissionLauncher.launch(Manifest.permission.POST_NOTIFICATIONS)
+                return
+            }
+        }
+        // Permission already granted (or pre-Android 13) — schedule notifications
+        NotificationScheduler.scheduleAll(this)
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {

@@ -1,0 +1,19 @@
+{
+  "user_id": "aravindh",
+  "diet_type": "non_vegetarian",
+  "preferred_cuisines": ["south_indian", "indian_home_food"],
+  "preferred_foods": [
+    "chapathi", "red rice", "ragi roti", "ragi kali", "millets",
+    "eggs", "chicken", "fish", "curd", "vegetable saute",
+    "beans", "carrot", "broccoli", "zucchini", "mushroom", "spinach"
+  ],
+  "snack_preferences": [
+    "roasted channa", "peanuts", "boiled peanuts", "popcorn", "fruit", "buttermilk"
+  ],
+  "disliked_foods": ["very oily foods"],
+  "avoid_if_possible": ["deep fried snacks", "refined sugar desserts"],
+  "protein_sources": ["eggs", "chicken", "fish", "curd", "paneer"],
+  "carb_sources": ["red rice", "chapathi", "millets", "ragi", "oats"],
+  "vegetable_choices": ["beans", "carrot", "broccoli", "zucchini", "spinach", "capsicum"],
+  "fruit_preferences": ["apple", "guava", "papaya", "watermelon", "muskmelon", "banana"]
+}

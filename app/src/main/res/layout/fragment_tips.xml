@@ -11,55 +11,15 @@
         android:orientation="vertical"
         android:padding="16dp">
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Meal Suggestions"
-            android:textSize="20sp"
-            android:textStyle="bold"
-            android:textColor="@color/on_surface"
-            android:layout_marginBottom="8dp" />
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Get AI-powered meal suggestions based on your nutrition targets and medical context."
-            android:textSize="14sp"
-            android:textColor="@color/on_surface_variant"
-            android:layout_marginBottom="20dp" />
-
-        <com.google.android.material.button.MaterialButton
-            android:id="@+id/btnGetSuggestions"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Get Meal Suggestions"
-            android:textAllCaps="false"
-            style="@style/Widget.Material3.Button"
-            android:layout_marginBottom="16dp" />
-
-        <ProgressBar
-            android:id="@+id/progressBar"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center_horizontal"
-            android:visibility="gone"
-            android:layout_marginBottom="16dp" />
-
-        <TextView
-            android:id="@+id/tvError"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:textColor="@color/error"
-            android:visibility="gone"
-            android:layout_marginBottom="8dp" />
-
+        <!-- Today's Meal Progress Card -->
         <com.google.android.material.card.MaterialCardView
-            android:id="@+id/cardSuggestions"
+            android:id="@+id/cardMealProgress"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginBottom="16dp"
             android:visibility="gone"
-            app:cardCornerRadius="12dp"
-            app:cardElevation="2dp">
+            app:cardCornerRadius="16dp"
+            app:cardElevation="3dp">
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -70,11 +30,105 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Suggestions for you"
+                    android:text="Today's Meals"
                     android:textSize="14sp"
                     android:textStyle="bold"
-                    android:textColor="@color/primary"
+                    android:textColor="@color/on_surface_variant"
                     android:layout_marginBottom="10dp" />
+
+                <com.google.android.material.chip.ChipGroup
+                    android:id="@+id/chipGroupMeals"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="8dp"
+                    app:chipSpacingHorizontal="6dp"
+                    app:chipSpacingVertical="4dp" />
+
+                <TextView
+                    android:id="@+id/tvMealCount"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textSize="13sp"
+                    android:textColor="@color/on_surface_variant" />
+
+            </LinearLayout>
+        </com.google.android.material.card.MaterialCardView>
+
+        <!-- Get Suggestions Button -->
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btnGetSuggestions"
+            android:layout_width="match_parent"
+            android:layout_height="56dp"
+            android:text="Get Meal Suggestions"
+            android:textAllCaps="false"
+            android:textSize="16sp"
+            style="@style/Widget.Material3.Button"
+            android:layout_marginBottom="16dp" />
+
+        <!-- Loading -->
+        <ProgressBar
+            android:id="@+id/progressBar"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:visibility="gone"
+            android:layout_marginBottom="8dp" />
+
+        <!-- Error -->
+        <TextView
+            android:id="@+id/tvError"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textColor="@color/error"
+            android:visibility="gone"
+            android:layout_marginBottom="8dp" />
+
+        <!-- Suggestions Card -->
+        <com.google.android.material.card.MaterialCardView
+            android:id="@+id/cardSuggestions"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:visibility="gone"
+            app:cardCornerRadius="16dp"
+            app:cardElevation="3dp">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:padding="16dp">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:gravity="center_vertical"
+                    android:layout_marginBottom="12dp">
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="AI Suggestions"
+                        android:textSize="16sp"
+                        android:textStyle="bold"
+                        android:textColor="@color/primary" />
+
+                </LinearLayout>
+
+                <TextView
+                    android:id="@+id/tvSuggestionsHeader"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:textSize="13sp"
+                    android:textColor="@color/on_surface_variant"
+                    android:layout_marginBottom="12dp" />
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:background="@color/outline_variant"
+                    android:layout_marginBottom="12dp" />
 
                 <TextView
                     android:id="@+id/tvSuggestions"
@@ -82,7 +136,7 @@
                     android:layout_height="wrap_content"
                     android:textSize="15sp"
                     android:textColor="@color/on_surface"
-                    android:lineSpacingExtra="4dp" />
+                    android:lineSpacingExtra="6dp" />
 
             </LinearLayout>
         </com.google.android.material.card.MaterialCardView>

@@ -1,5 +1,6 @@
 package com.healthtrack.ui.foodlog
 
+import android.content.Context
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -13,10 +14,11 @@ import kotlinx.coroutines.launch
 class FoodLogViewModel(
     private val userId: String,
     private val securePrefs: SecurePrefs,
-    private val profileManager: UserProfileManager
+    private val profileManager: UserProfileManager,
+    private val context: Context
 ) : ViewModel() {
 
-    private val repository = NutritionRepository(securePrefs)
+    private val repository = NutritionRepository(securePrefs, context)
 
     private val _state = MutableLiveData<FoodLogState>(FoodLogState.Idle)
     val state: LiveData<FoodLogState> = _state

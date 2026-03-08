@@ -6,9 +6,18 @@ import com.healthtrack.data.model.UserProfile
 
 interface LlmService {
     suspend fun estimateNutrients(foodText: String, userProfile: UserProfile): NutrientData
+
     suspend fun getMealSuggestions(
         consumed: NutrientData,
         targets: NutrientTargets,
-        userProfile: UserProfile
+        userProfile: UserProfile,
+        loggedMealTypes: List<String>,         // e.g. ["Breakfast", "Lunch"]
+        remainingMealTypes: List<String>,      // e.g. ["Evening Snack", "Dinner"]
+        preferencesJson: String,               // raw food_preferences.json content
+        weeklyContext: String = "",            // avg nutrient summary for last 7 days
+        previousSuggestions: List<String> = emptyList() // recent suggestions to avoid repeating
     ): String
+
+    // Returns true if the food is healthy and compatible with user's medical conditions
+    suspend fun isFoodHealthyForUser(food: String, userProfile: UserProfile): Boolean
 }

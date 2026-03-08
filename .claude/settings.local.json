@@ -1,0 +1,7 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(\"c:/Users/admin/Downloads/Health_Track/app/src/main/java/com/healthtrack/ui/tips/TipsViewModel.kt\":*)"
+    ]
+  }
+}

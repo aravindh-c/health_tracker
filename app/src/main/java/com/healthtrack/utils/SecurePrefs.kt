@@ -24,6 +24,8 @@ class SecurePrefs(context: Context) {
         private const val KEY_CLAUDE_API_KEY = "claude_api_key"
         private const val KEY_LLM_PROVIDER = "llm_provider"
         private const val KEY_SETUP_DONE = "setup_done"
+        private const val KEY_LAST_ACTIVE_USER = "last_active_user_id"
+        private const val KEY_NOTIFICATIONS_SCHEDULED = "notifications_scheduled"
     }
 
     var openAiKey: String
@@ -44,6 +46,14 @@ class SecurePrefs(context: Context) {
     var isSetupDone: Boolean
         get() = prefs.getBoolean(KEY_SETUP_DONE, false)
         set(value) = prefs.edit().putBoolean(KEY_SETUP_DONE, value).apply()
+
+    var lastActiveUserId: String
+        get() = prefs.getString(KEY_LAST_ACTIVE_USER, "aravindh") ?: "aravindh"
+        set(value) = prefs.edit().putString(KEY_LAST_ACTIVE_USER, value).apply()
+
+    var notificationsScheduled: Boolean
+        get() = prefs.getBoolean(KEY_NOTIFICATIONS_SCHEDULED, false)
+        set(value) = prefs.edit().putBoolean(KEY_NOTIFICATIONS_SCHEDULED, value).apply()
 
     fun getActiveApiKey(): String = when (llmProvider) {
         LlmProvider.OPENAI -> openAiKey

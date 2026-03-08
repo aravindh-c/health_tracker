@@ -30,23 +30,63 @@
     }
   },
   {
-    "user_id": "wife",
-    "display_name": "Wife",
-    "age": 30,
-    "height_cm": 160,
-    "weight_kg": 65.0,
-    "medical_conditions": [],
-    "latest_reports": {},
+    "user_id": "deepa",
+    "display_name": "Deepa",
+    "age": 31,
+    "height_cm": 149,
+    "weight_kg": 63.0,
+    "medical_conditions": [
+      "overweight",
+      "severe vitamin D deficiency",
+      "early iron deficiency (low transferrin saturation)",
+      "possible migraine or tension headaches",
+      "sedentary lifestyle",
+      "chronic stress (work-related)"
+    ],
+    "reported_symptoms": [
+      "frequent headaches",
+      "leg pain",
+      "tiredness",
+      "sleepiness",
+      "bloating",
+      "high abdominal fat",
+      "stress",
+      "low physical activity"
+    ],
+    "latest_reports": {
+      "hemoglobin_g_dl": "12.6",
+      "vitamin_d_ng_ml": "7.0",
+      "vitamin_b12_pg_ml": "448",
+      "ldl_mg_dl": "117",
+      "hdl_mg_dl": "62",
+      "triglycerides_mg_dl": "75",
+      "hba1c": "5.1",
+      "fasting_glucose_mg_dl": "76",
+      "tsh_uiu_ml": "3.88",
+      "iron_ug_dl": "59.5",
+      "transferrin_saturation_percent": "17.7"
+    },
     "health_goals": [
-      "healthy eating",
-      "balanced nutrition"
+      "weight loss",
+      "reduce abdominal fat",
+      "correct vitamin D deficiency",
+      "improve iron status",
+      "reduce headaches and fatigue",
+      "reduce bloating",
+      "improve energy levels"
     ],
     "targets": {
-      "protein_g": 60.0,
-      "fat_g": 50.0,
+      "protein_g": 70.0,
+      "fat_g": 45.0,
       "fiber_g": 25.0,
-      "calories_kcal": 1600.0,
-      "simple_carbs_max_g": 50.0
-    }
+      "calories_kcal": 1400.0,
+      "simple_carbs_max_g": 35.0
+    },
+    "risk_flags": [
+      "vitamin D deficiency may cause leg pain and fatigue",
+      "high tea intake (4 cups/day) reduces iron absorption - limit to max 2 cups",
+      "sedentary lifestyle contributing to abdominal fat",
+      "stress may contribute to headaches and bloating"
+    ]
   }
 ]

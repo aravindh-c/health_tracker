@@ -9,7 +9,10 @@ data class UserProfile(
     val medical_conditions: List<String>,
     val latest_reports: Map<String, String>,
     val health_goals: List<String>,
-    val targets: NutrientTargets
+    val targets: NutrientTargets,
+    // Optional extra fields — Gson ignores unknown, these are passed to LLM for richer context
+    val reported_symptoms: List<String>? = null,
+    val risk_flags: List<String>? = null
 )
 
 data class NutrientTargets(
@@ -71,3 +74,8 @@ enum class LlmProvider(val display: String) {
     OPENAI("OpenAI GPT-4o"),
     CLAUDE("Claude (Anthropic)")
 }
+
+data class DailyNutrientPoint(
+    val date: String,          // "2026-03-08"
+    val nutrients: NutrientData
+)

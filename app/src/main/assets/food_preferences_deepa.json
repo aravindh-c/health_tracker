@@ -1,0 +1,33 @@
+{
+  "user_id": "deepa",
+  "diet_type": "non_vegetarian",
+  "preferred_cuisines": ["south_indian", "indian_home_food"],
+  "preferred_foods": [
+    "chapathi", "idli", "dosa", "sambar", "rasam",
+    "eggs", "chicken", "fish", "curd",
+    "spinach", "beans", "carrot", "drumstick", "beetroot"
+  ],
+  "snack_preferences": [
+    "fruit", "buttermilk", "roasted channa", "boiled eggs", "nuts"
+  ],
+  "disliked_foods": [],
+  "avoid_if_possible": [
+    "deep fried foods", "refined sugar desserts",
+    "excess salt", "excess tamarind", "excess chilli",
+    "tea more than 2 cups per day"
+  ],
+  "protein_sources": ["eggs", "chicken", "fish", "curd", "legumes"],
+  "carb_sources": ["chapathi", "red rice (small portion)", "millets", "oats", "idli"],
+  "vegetable_choices": [
+    "spinach", "beans", "carrot", "drumstick", "beetroot",
+    "broccoli", "capsicum", "mushroom"
+  ],
+  "fruit_preferences": ["apple", "guava", "papaya", "orange", "watermelon"],
+  "nutrition_focus": [
+    "iron-rich foods (spinach, beetroot, drumstick, eggs)",
+    "vitamin D sources (eggs, fish, mushroom, sunlight)",
+    "high fiber to reduce bloating",
+    "anti-inflammatory foods for headache relief",
+    "low salt to reduce water retention"
+  ]
+}

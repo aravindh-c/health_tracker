@@ -1,5 +1,6 @@
 package com.healthtrack.ui.history
 
+import android.content.Context
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -11,10 +12,11 @@ import kotlinx.coroutines.launch
 
 class HistoryViewModel(
     private val userId: String,
-    private val securePrefs: SecurePrefs
+    private val securePrefs: SecurePrefs,
+    private val context: Context
 ) : ViewModel() {
 
-    private val repository = NutritionRepository(securePrefs)
+    private val repository = NutritionRepository(securePrefs, context)
 
     private val _meals = MutableLiveData<List<MealHistory>>(emptyList())
     val meals: LiveData<List<MealHistory>> = _meals

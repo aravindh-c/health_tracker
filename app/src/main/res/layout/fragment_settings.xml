@@ -98,5 +98,39 @@
             android:textColor="@color/on_surface_variant"
             android:gravity="center" />
 
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_marginTop="24dp"
+            android:layout_marginBottom="20dp"
+            android:background="@color/on_surface_variant"
+            android:alpha="0.2" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Food Preferences"
+            android:textSize="16sp"
+            android:textStyle="bold"
+            android:textColor="@color/on_surface"
+            android:layout_marginBottom="8dp" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Export your auto-scaled food preferences (including foods learned from your meal logs) as a JSON file to Downloads."
+            android:textSize="13sp"
+            android:textColor="@color/on_surface_variant"
+            android:layout_marginBottom="12dp" />
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btnExportPreferences"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Export My Food Preferences"
+            android:textAllCaps="false"
+            style="@style/Widget.Material3.Button.OutlinedButton"
+            app:icon="@android:drawable/ic_menu_save" />
+
     </LinearLayout>
 </ScrollView>
