@@ -29,7 +29,20 @@ ${buildMedicalContext(userProfile)}
 Food eaten:
 $foodText
 
-Estimate the nutrients for this food. Return ONLY valid JSON with no extra text:
+Task:
+Estimate the nutritional values for the food eaten.
+
+Rules:
+1. Interpret natural descriptions like "little rice", "small bowl", "2 idli", etc.
+2. Estimate reasonable portion sizes if exact quantity is missing.
+3. Classify carbohydrates as:
+   - carbs_simple_g: sugars or rapidly absorbed carbs (fruit sugars, added sugar, sweets).
+   - carbs_complex_g: starch-based carbs such as rice, wheat, oats, millets, lentils, idli, dosa, chapathi.
+4. Fiber should represent dietary fiber from grains, vegetables, legumes, etc.
+5. If food contains both types of carbs, split values accordingly.
+
+
+Return ONLY valid JSON with no explanation or extra text:
 {
   "protein_g": <number>,
   "fat_g": <number>,

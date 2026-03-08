@@ -5,6 +5,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ArrayAdapter
+import android.widget.Filter
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.ViewModel
@@ -51,8 +52,17 @@ class FoodLogFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        binding.cardResult.visibility = View.GONE
+
         meals = MealType.displayList()
-        mealAdapter = ArrayAdapter(requireContext(), android.R.layout.simple_dropdown_item_1line, meals)
+        mealAdapter = object : ArrayAdapter<String>(requireContext(), android.R.layout.simple_dropdown_item_1line, meals) {
+            override fun getFilter(): Filter = object : Filter() {
+                override fun performFiltering(constraint: CharSequence?) = FilterResults().apply {
+                    values = meals; count = meals.size
+                }
+                override fun publishResults(constraint: CharSequence?, results: FilterResults?) = notifyDataSetChanged()
+            }
+        }
         resetMealDropdown()
 
         binding.btnLog.setOnClickListener {
@@ -65,8 +75,8 @@ class FoodLogFragment : Fragment() {
             when (state) {
                 is FoodLogState.Idle -> {
                     binding.progressBar.visibility = View.GONE
-                    binding.cardResult.visibility = View.GONE
                     binding.btnLog.isEnabled = true
+                    // cardResult intentionally NOT hidden — preserve result visible after reset
                 }
                 is FoodLogState.Loading -> {
                     binding.progressBar.visibility = View.VISIBLE
@@ -78,6 +88,7 @@ class FoodLogFragment : Fragment() {
                     binding.btnLog.isEnabled = true
                     showNutrientResult(state.nutrients)
                     showMotivationalPopup(state.nutrients)
+                    viewModel.reset() // reset immediately — prevents re-trigger on tab re-navigation
                 }
                 is FoodLogState.Error -> {
                     binding.progressBar.visibility = View.GONE
