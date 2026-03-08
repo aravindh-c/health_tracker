@@ -1,0 +1,52 @@
+[
+  {
+    "user_id": "aravindh",
+    "display_name": "Aravindh",
+    "age": 32,
+    "height_cm": 171,
+    "weight_kg": 86.0,
+    "medical_conditions": [
+      "prediabetes",
+      "fatty liver grade 1",
+      "elevated uric acid",
+      "kidney stone history"
+    ],
+    "latest_reports": {
+      "hba1c": "6.1",
+      "ldl": "187",
+      "vitamin_d": "9.5"
+    },
+    "health_goals": [
+      "weight loss",
+      "reduce fatty liver",
+      "control blood sugar"
+    ],
+    "targets": {
+      "protein_g": 100.0,
+      "fat_g": 60.0,
+      "fiber_g": 30.0,
+      "calories_kcal": 1800.0,
+      "simple_carbs_max_g": 40.0
+    }
+  },
+  {
+    "user_id": "wife",
+    "display_name": "Wife",
+    "age": 30,
+    "height_cm": 160,
+    "weight_kg": 65.0,
+    "medical_conditions": [],
+    "latest_reports": {},
+    "health_goals": [
+      "healthy eating",
+      "balanced nutrition"
+    ],
+    "targets": {
+      "protein_g": 60.0,
+      "fat_g": 50.0,
+      "fiber_g": 25.0,
+      "calories_kcal": 1600.0,
+      "simple_carbs_max_g": 50.0
+    }
+  }
+]

@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item
+        android:id="@+id/foodLogFragment"
+        android:icon="@android:drawable/ic_menu_add"
+        android:title="Log" />
+
+    <item
+        android:id="@+id/reportFragment"
+        android:icon="@android:drawable/ic_menu_info_details"
+        android:title="Report" />
+
+    <item
+        android:id="@+id/historyFragment"
+        android:icon="@android:drawable/ic_menu_recent_history"
+        android:title="History" />
+
+    <item
+        android:id="@+id/tipsFragment"
+        android:icon="@android:drawable/ic_menu_help"
+        android:title="Tips" />
+
+</menu>

@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/nav_graph"
+    app:startDestination="@id/foodLogFragment">
+
+    <fragment
+        android:id="@+id/foodLogFragment"
+        android:name="com.healthtrack.ui.foodlog.FoodLogFragment"
+        android:label="Log Food" />
+
+    <fragment
+        android:id="@+id/reportFragment"
+        android:name="com.healthtrack.ui.report.ReportFragment"
+        android:label="Daily Report" />
+
+    <fragment
+        android:id="@+id/historyFragment"
+        android:name="com.healthtrack.ui.history.HistoryFragment"
+        android:label="History" />
+
+    <fragment
+        android:id="@+id/tipsFragment"
+        android:name="com.healthtrack.ui.tips.TipsFragment"
+        android:label="Tips" />
+
+    <fragment
+        android:id="@+id/settingsFragment"
+        android:name="com.healthtrack.ui.settings.SettingsFragment"
+        android:label="Settings" />
+
+</navigation>
