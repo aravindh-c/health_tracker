@@ -10,6 +10,9 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
+import com.google.android.material.datepicker.CalendarConstraints
+import com.google.android.material.datepicker.DateValidatorPointBackward
+import com.google.android.material.datepicker.MaterialDatePicker
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.snackbar.Snackbar
 import com.healthtrack.data.model.MealType
@@ -19,11 +22,16 @@ import com.healthtrack.ui.MainActivity
 import com.healthtrack.utils.PopupMessageHelper
 import com.healthtrack.utils.SecurePrefs
 import com.healthtrack.utils.UserProfileManager
+import java.time.LocalDate
+import java.time.format.DateTimeFormatter
 
 class FoodLogFragment : Fragment() {
 
     private var _binding: FragmentFoodLogBinding? = null
     private val binding get() = _binding!!
+
+    private var selectedDate: LocalDate = LocalDate.now()
+    private val chipDateFormatter = DateTimeFormatter.ofPattern("d MMM")
 
     // Keep adapter as field so we can reset it after each log
     private lateinit var meals: List<String>
@@ -53,6 +61,7 @@ class FoodLogFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         binding.cardResult.visibility = View.GONE
+        setupDateChips()
 
         meals = MealType.displayList()
         mealAdapter = object : ArrayAdapter<String>(requireContext(), android.R.layout.simple_dropdown_item_1line, meals) {
@@ -68,7 +77,7 @@ class FoodLogFragment : Fragment() {
         binding.btnLog.setOnClickListener {
             val mealType = binding.spinnerMeal.text.toString()
             val foodText = binding.etFoodText.text?.toString()?.trim() ?: ""
-            viewModel.logMeal(mealType, foodText)
+            viewModel.logMeal(mealType, foodText, selectedDate.toString())
         }
 
         viewModel.state.observe(viewLifecycleOwner) { state ->
@@ -97,6 +106,54 @@ class FoodLogFragment : Fragment() {
                     viewModel.reset()
                 }
             }
+        }
+    }
+
+    private fun setupDateChips() {
+        binding.chipToday.setOnClickListener {
+            selectedDate = LocalDate.now()
+            binding.chipPickDate.text = "Pick date…"
+        }
+        binding.chipYesterday.setOnClickListener {
+            selectedDate = LocalDate.now().minusDays(1)
+            binding.chipPickDate.text = "Pick date…"
+        }
+        binding.chipPickDate.setOnClickListener {
+            val constraints = CalendarConstraints.Builder()
+                .setValidator(DateValidatorPointBackward.now())
+                .build()
+            val picker = MaterialDatePicker.Builder.datePicker()
+                .setTitleText("Select log date")
+                .setSelection(selectedDate.toEpochDay() * 86_400_000L)
+                .setCalendarConstraints(constraints)
+                .build()
+            picker.addOnPositiveButtonClickListener { millis ->
+                val picked = LocalDate.ofEpochDay(millis / 86_400_000L)
+                selectedDate = picked
+                when (picked) {
+                    LocalDate.now() -> {
+                        binding.chipGroupDate.check(binding.chipToday.id)
+                        binding.chipPickDate.text = "Pick date…"
+                    }
+                    LocalDate.now().minusDays(1) -> {
+                        binding.chipGroupDate.check(binding.chipYesterday.id)
+                        binding.chipPickDate.text = "Pick date…"
+                    }
+                    else -> {
+                        binding.chipPickDate.text = picked.format(chipDateFormatter)
+                        binding.chipGroupDate.check(binding.chipPickDate.id)
+                    }
+                }
+            }
+            // Re-check chipPickDate if user cancels (chip group requires selection)
+            picker.addOnNegativeButtonClickListener {
+                if (binding.chipGroupDate.checkedChipId == binding.chipPickDate.id &&
+                    binding.chipPickDate.text == "Pick date…") {
+                    binding.chipGroupDate.check(binding.chipToday.id)
+                    selectedDate = LocalDate.now()
+                }
+            }
+            picker.show(parentFragmentManager, "date_picker")
         }
     }
 

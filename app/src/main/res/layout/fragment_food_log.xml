@@ -11,6 +11,39 @@
         android:orientation="vertical"
         android:padding="16dp">
 
+        <!-- Date Selector -->
+        <com.google.android.material.chip.ChipGroup
+            android:id="@+id/chipGroupDate"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="16dp"
+            app:singleSelection="true"
+            app:selectionRequired="true">
+
+            <com.google.android.material.chip.Chip
+                android:id="@+id/chipToday"
+                style="@style/Widget.Material3.Chip.Filter"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Today"
+                android:checked="true" />
+
+            <com.google.android.material.chip.Chip
+                android:id="@+id/chipYesterday"
+                style="@style/Widget.Material3.Chip.Filter"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Yesterday" />
+
+            <com.google.android.material.chip.Chip
+                android:id="@+id/chipPickDate"
+                style="@style/Widget.Material3.Chip.Filter"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Pick date…" />
+
+        </com.google.android.material.chip.ChipGroup>
+
         <!-- Meal Type Selector -->
         <com.google.android.material.textfield.TextInputLayout
             android:layout_width="match_parent"

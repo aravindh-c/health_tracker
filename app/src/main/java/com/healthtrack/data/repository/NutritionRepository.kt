@@ -43,13 +43,13 @@ class NutritionRepository(
         userId: String,
         mealType: String,
         foodText: String,
-        userProfile: UserProfile
+        userProfile: UserProfile,
+        date: String = LocalDate.now().toString()
     ): Result<NutrientData> {
         return try {
-            val today = LocalDate.now().toString()
-            sheetsService.logFood(today, userId, mealType, foodText)
+            sheetsService.logFood(date, userId, mealType, foodText)
             val nutrients = getLlmService().estimateNutrients(foodText, userProfile)
-            sheetsService.logNutrients(today, userId, mealType, nutrients)
+            sheetsService.logNutrients(date, userId, mealType, nutrients)
 
             withContext(Dispatchers.IO) {
                 prefManager.trackFoodText(userId, foodText)
