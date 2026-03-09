@@ -9,6 +9,7 @@ import com.healthtrack.data.model.DailyNutrientPoint
 import com.healthtrack.data.model.DailyScore
 import com.healthtrack.data.model.LlmProvider
 import com.healthtrack.data.model.MealHistory
+import com.healthtrack.data.model.MealLogResult
 import com.healthtrack.data.model.MealType
 import com.healthtrack.data.model.NutrientData
 import com.healthtrack.data.model.UserProfile
@@ -45,17 +46,19 @@ class NutritionRepository(
         foodText: String,
         userProfile: UserProfile,
         date: String = LocalDate.now().toString()
-    ): Result<NutrientData> {
+    ): Result<MealLogResult> {
         return try {
+            val llm = getLlmService()
             sheetsService.logFood(date, userId, mealType, foodText)
-            val nutrients = getLlmService().estimateNutrients(foodText, userProfile)
+            val nutrients = llm.estimateNutrients(foodText, userProfile)
             sheetsService.logNutrients(date, userId, mealType, nutrients)
+            prefManager.trackFoodText(userId, foodText)
 
-            withContext(Dispatchers.IO) {
-                prefManager.trackFoodText(userId, foodText)
-            }
+            // Fetch updated daily total then generate insights
+            val todayTotal = try { sheetsService.getDailyReport(userId, date) } catch (e: Exception) { nutrients }
+            val insights = try { llm.getInsights(nutrients, todayTotal, userProfile) } catch (e: Exception) { "" }
 
-            Result.success(nutrients)
+            Result.success(MealLogResult(nutrients, insights))
         } catch (e: Exception) {
             Result.failure(e)
         }

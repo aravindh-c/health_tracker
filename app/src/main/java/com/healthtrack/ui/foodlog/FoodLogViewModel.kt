@@ -5,6 +5,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.healthtrack.data.model.MealLogResult
 import com.healthtrack.data.model.NutrientData
 import com.healthtrack.data.repository.NutritionRepository
 import com.healthtrack.utils.SecurePrefs
@@ -40,7 +41,7 @@ class FoodLogViewModel(
         viewModelScope.launch {
             val result = repository.logMeal(userId, mealType, foodText, profile, date)
             result.fold(
-                onSuccess = { nutrients -> _state.value = FoodLogState.Success(nutrients) },
+                onSuccess = { r -> _state.value = FoodLogState.Success(r.nutrients, r.insights) },
                 onFailure = { e -> _state.value = FoodLogState.Error(e.message ?: "Unknown error") }
             )
         }
@@ -54,6 +55,6 @@ class FoodLogViewModel(
 sealed class FoodLogState {
     object Idle : FoodLogState()
     object Loading : FoodLogState()
-    data class Success(val nutrients: NutrientData) : FoodLogState()
+    data class Success(val nutrients: NutrientData, val insights: String) : FoodLogState()
     data class Error(val message: String) : FoodLogState()
 }

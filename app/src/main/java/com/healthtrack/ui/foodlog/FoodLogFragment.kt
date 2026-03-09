@@ -19,6 +19,7 @@ import com.healthtrack.data.model.MealType
 import com.healthtrack.data.model.NutrientData
 import com.healthtrack.databinding.FragmentFoodLogBinding
 import com.healthtrack.ui.MainActivity
+import com.healthtrack.utils.NotificationHelper
 import com.healthtrack.utils.PopupMessageHelper
 import com.healthtrack.utils.SecurePrefs
 import com.healthtrack.utils.UserProfileManager
@@ -95,8 +96,11 @@ class FoodLogFragment : Fragment() {
                 is FoodLogState.Success -> {
                     binding.progressBar.visibility = View.GONE
                     binding.btnLog.isEnabled = true
-                    showNutrientResult(state.nutrients)
+                    showNutrientResult(state.nutrients, state.insights)
                     showMotivationalPopup(state.nutrients)
+                    if (state.insights.isNotBlank()) {
+                        NotificationHelper(requireContext()).showMealInsight(state.insights)
+                    }
                     viewModel.reset() // reset immediately — prevents re-trigger on tab re-navigation
                 }
                 is FoodLogState.Error -> {
@@ -164,7 +168,7 @@ class FoodLogFragment : Fragment() {
         binding.spinnerMeal.dismissDropDown()
     }
 
-    private fun showNutrientResult(n: com.healthtrack.data.model.NutrientData) {
+    private fun showNutrientResult(n: com.healthtrack.data.model.NutrientData, insights: String) {
         binding.cardResult.visibility = View.VISIBLE
         binding.tvProtein.text = "Protein: ${n.protein_g.toInt()} g"
         binding.tvFat.text = "Fat: ${n.fat_g.toInt()} g"
@@ -172,6 +176,13 @@ class FoodLogFragment : Fragment() {
         binding.tvCalories.text = "Calories: ${n.calories_kcal.toInt()} kcal"
         binding.tvSimpleCarbs.text = "Simple Carbs: ${n.carbs_simple_g.toInt()} g"
         binding.tvComplexCarbs.text = "Complex Carbs: ${n.carbs_complex_g.toInt()} g"
+
+        if (insights.isNotBlank()) {
+            binding.tvInsights.text = insights
+            binding.tvInsights.visibility = View.VISIBLE
+        } else {
+            binding.tvInsights.visibility = View.GONE
+        }
 
         // Clear food input and reset dropdown for next entry
         binding.etFoodText.setText("")

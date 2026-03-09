@@ -18,6 +18,13 @@ interface LlmService {
         previousSuggestions: List<String> = emptyList() // recent suggestions to avoid repeating
     ): String
 
+    // 2-3 sentence insight after a meal is logged — what went well, any concern, one tip
+    suspend fun getInsights(
+        mealNutrients: NutrientData,
+        todayTotal: NutrientData,
+        userProfile: UserProfile
+    ): String
+
     // Returns true if the food is healthy and compatible with user's medical conditions
     suspend fun isFoodHealthyForUser(food: String, userProfile: UserProfile): Boolean
 }

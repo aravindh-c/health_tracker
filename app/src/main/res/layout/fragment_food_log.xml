@@ -132,6 +132,25 @@
                 <TextView android:id="@+id/tvSimpleCarbs" android:layout_width="wrap_content" android:layout_height="wrap_content" android:textSize="15sp" android:layout_marginBottom="6dp" />
                 <TextView android:id="@+id/tvComplexCarbs" android:layout_width="wrap_content" android:layout_height="wrap_content" android:textSize="15sp" />
 
+                <View android:layout_width="match_parent" android:layout_height="1dp" android:background="@color/outline_variant" android:layout_marginVertical="12dp" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Insights"
+                    android:textSize="13sp"
+                    android:textStyle="bold"
+                    android:textColor="@color/primary"
+                    android:layout_marginBottom="6dp" />
+
+                <TextView
+                    android:id="@+id/tvInsights"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:textSize="14sp"
+                    android:lineSpacingMultiplier="1.4"
+                    android:visibility="gone" />
+
             </LinearLayout>
         </com.google.android.material.card.MaterialCardView>
 

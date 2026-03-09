@@ -26,7 +26,8 @@
       "fat_g": 60.0,
       "fiber_g": 30.0,
       "calories_kcal": 1800.0,
-      "simple_carbs_max_g": 40.0
+      "simple_carbs_max_g": 40.0,
+      "carbs_complex_g": 85.0
     }
   },
   {
@@ -79,8 +80,9 @@
       "protein_g": 70.0,
       "fat_g": 45.0,
       "fiber_g": 25.0,
-      "calories_kcal": 1400.0,
-      "simple_carbs_max_g": 35.0
+      "calories_kcal": 1250.0,
+      "simple_carbs_max_g": 35.0,
+      "carbs_complex_g": 85.0
     },
     "risk_flags": [
       "vitamin D deficiency may cause leg pain and fatigue",

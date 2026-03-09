@@ -20,7 +20,8 @@ data class NutrientTargets(
     val fat_g: Double = 60.0,
     val fiber_g: Double = 30.0,
     val calories_kcal: Double = 1800.0,
-    val simple_carbs_max_g: Double = 40.0
+    val simple_carbs_max_g: Double = 40.0,
+    val carbs_complex_g: Double = 85.0
 )
 
 data class NutrientData(
@@ -74,6 +75,11 @@ enum class LlmProvider(val display: String) {
     OPENAI("OpenAI GPT-4o"),
     CLAUDE("Claude (Anthropic)")
 }
+
+data class MealLogResult(
+    val nutrients: NutrientData,
+    val insights: String       // LLM-generated post-meal insight
+)
 
 data class DailyNutrientPoint(
     val date: String,          // "2026-03-08"

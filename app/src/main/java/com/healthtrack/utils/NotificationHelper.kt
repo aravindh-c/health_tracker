@@ -49,6 +49,16 @@ class NotificationHelper(private val context: Context) {
         }
     }
 
+    // Called immediately after a meal is logged — shows LLM insight as notification
+    fun showMealInsight(insight: String) {
+        val userId = SecurePrefs(context).lastActiveUserId
+        val name = UserProfileManager(context).getProfile(userId)?.display_name ?: "there"
+        val body = insight.substringBefore('.').take(100).trim().let {
+            if (it.length < insight.trimEnd('.').length) "$it." else it
+        }
+        showNotification("Meal logged, $name! 🍽", body, "meal_insight".hashCode())
+    }
+
     // Called by MealReminderWorker to show a scheduled slot notification
     fun showReminder(slotKey: String) {
         val securePrefs = SecurePrefs(context)

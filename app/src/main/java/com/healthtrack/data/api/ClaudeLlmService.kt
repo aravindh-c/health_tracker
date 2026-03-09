@@ -78,6 +78,10 @@ Return ONLY valid JSON with no explanation or extra text:
                 "\n== Avoid Repeating These Recent Suggestions ==\n${previousSuggestions.joinToString("\n---\n")}\n"
             else ""
 
+            val remainingCal = (targets.calories_kcal - consumed.calories_kcal).coerceAtLeast(0.0).toInt()
+            val remainingProtein = (targets.protein_g - consumed.protein_g).coerceAtLeast(0.0).toInt()
+            val remainingFiber = (targets.fiber_g - consumed.fiber_g).coerceAtLeast(0.0).toInt()
+
             val prompt = """
 You are a medical nutrition assistant helping an Indian user plan meals.
 
@@ -85,10 +89,10 @@ You are a medical nutrition assistant helping an Indian user plan meals.
 ${buildMedicalContext(userProfile)}
 
 == Today's Nutrition Progress ==
-- Protein: ${consumed.protein_g.toInt()}g / ${targets.protein_g.toInt()}g target
+- Calories: ${consumed.calories_kcal.toInt()} / ${targets.calories_kcal.toInt()} kcal → $remainingCal kcal remaining
+- Protein: ${consumed.protein_g.toInt()}g / ${targets.protein_g.toInt()}g → $remainingProtein g remaining
+- Fiber: ${consumed.fiber_g.toInt()}g / ${targets.fiber_g.toInt()}g → $remainingFiber g remaining
 - Fat: ${consumed.fat_g.toInt()}g / ${targets.fat_g.toInt()}g target
-- Fiber: ${consumed.fiber_g.toInt()}g / ${targets.fiber_g.toInt()}g target
-- Calories: ${consumed.calories_kcal.toInt()} / ${targets.calories_kcal.toInt()} kcal
 - Simple Carbs: ${consumed.carbs_simple_g.toInt()}g (max ${targets.simple_carbs_max_g.toInt()}g)
 $weeklySection
 == Meals Today ==
@@ -98,22 +102,59 @@ Remaining meals to plan: $remaining
 == Food Preferences ==
 $preferencesJson
 $prevSection
+== Goal: Close the Day Right ==
+Start with: "You need ~${remainingCal} kcal, ${remainingProtein}g protein, ${remainingFiber}g fiber more today."
+Suggestions MUST collectively cover these remaining needs.
+
 == Instructions ==
 - Suggest ONE meal per remaining meal type above
 - Prefer south Indian / Indian home food style
-- Use the 7-day pattern to address recurring deficiencies (e.g. consistently low fiber → add high-fiber foods)
-- Do NOT suggest meals already listed in the "Avoid Repeating" section above
+- Use the 7-day pattern to address recurring deficiencies
+- Do NOT repeat meals from "Avoid Repeating" section
 - Avoid foods worsening prediabetes, fatty liver, elevated uric acid, or kidney stones
 - Format EXACTLY:
 
 **[Meal Type]: [Meal Name]**
-• [food item] — [health reason]
+• [food item] — [health reason + rough cal/protein]
 • [food item] — [health reason]
 
 Max 3 bullets per meal. Keep it practical and home-cook friendly.
             """.trimIndent()
 
             callClaude(prompt, maxTokens = 1000)
+        }
+    }
+
+    override suspend fun getInsights(
+        mealNutrients: NutrientData,
+        todayTotal: NutrientData,
+        userProfile: UserProfile
+    ): String {
+        return withContext(Dispatchers.IO) {
+            val t = userProfile.targets
+            fun pct(v: Double, max: Double) = if (max > 0) ((v / max) * 100).toInt() else 0
+            val prompt = """
+You are a concise medical nutrition assistant.
+
+== Medical Profile ==
+${buildMedicalContext(userProfile)}
+
+== This Meal ==
+Protein: ${mealNutrients.protein_g.toInt()}g | Fat: ${mealNutrients.fat_g.toInt()}g | Fiber: ${mealNutrients.fiber_g.toInt()}g | Calories: ${mealNutrients.calories_kcal.toInt()} kcal | Simple Carbs: ${mealNutrients.carbs_simple_g.toInt()}g
+
+== Today's Running Total (after this meal) ==
+- Calories: ${todayTotal.calories_kcal.toInt()} / ${t.calories_kcal.toInt()} kcal (${pct(todayTotal.calories_kcal, t.calories_kcal)}%)
+- Protein: ${todayTotal.protein_g.toInt()}g / ${t.protein_g.toInt()}g (${pct(todayTotal.protein_g, t.protein_g)}%)
+- Fiber: ${todayTotal.fiber_g.toInt()}g / ${t.fiber_g.toInt()}g (${pct(todayTotal.fiber_g, t.fiber_g)}%)
+- Simple Carbs: ${todayTotal.carbs_simple_g.toInt()}g / max ${t.simple_carbs_max_g.toInt()}g
+
+Write exactly 2-3 plain-text sentences (no markdown, no bullets):
+1. Celebrate one win OR flag the biggest concern for this meal.
+2. State the remaining calorie/protein budget for the day.
+3. Give ONE specific tip for the next meal.
+Keep it under 45 words total.
+            """.trimIndent()
+            callClaude(prompt, maxTokens = 120)
         }
     }
 
