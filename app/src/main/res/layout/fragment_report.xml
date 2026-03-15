@@ -214,13 +214,105 @@
                     android:layout_marginTop="8dp">
 
                     <View android:layout_width="16dp" android:layout_height="3dp" android:background="#4CAF50" android:layout_marginEnd="4dp" />
-                    <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Calories" android:textSize="12sp" android:layout_marginEnd="16dp" />
+                    <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Cal" android:textSize="11sp" android:layout_marginEnd="12dp" />
 
                     <View android:layout_width="16dp" android:layout_height="3dp" android:background="#2196F3" android:layout_marginEnd="4dp" />
-                    <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Protein" android:textSize="12sp" android:layout_marginEnd="16dp" />
+                    <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Protein" android:textSize="11sp" android:layout_marginEnd="12dp" />
 
                     <View android:layout_width="16dp" android:layout_height="3dp" android:background="#FF9800" android:layout_marginEnd="4dp" />
-                    <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Fiber" android:textSize="12sp" />
+                    <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Fiber" android:textSize="11sp" android:layout_marginEnd="12dp" />
+
+                    <View android:layout_width="16dp" android:layout_height="3dp" android:background="#9C27B0" android:layout_marginEnd="4dp" />
+                    <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Carbs" android:textSize="11sp" android:layout_marginEnd="12dp" />
+
+                    <View android:layout_width="16dp" android:layout_height="3dp" android:background="#F44336" android:layout_marginEnd="4dp" />
+                    <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Fat" android:textSize="11sp" />
+
+                </LinearLayout>
+
+            </LinearLayout>
+        </com.google.android.material.card.MaterialCardView>
+
+        <!-- Weight Tracker Card -->
+        <com.google.android.material.card.MaterialCardView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="16dp"
+            app:cardCornerRadius="12dp"
+            app:cardElevation="2dp">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:padding="16dp">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Weight Tracker"
+                    android:textSize="16sp"
+                    android:textStyle="bold"
+                    android:textColor="@color/on_surface"
+                    android:layout_marginBottom="12dp" />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:gravity="center_vertical"
+                    android:layout_marginBottom="12dp">
+
+                    <com.google.android.material.textfield.TextInputLayout
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:hint="Today's weight (kg)"
+                        style="@style/Widget.Material3.TextInputLayout.OutlinedBox"
+                        android:layout_marginEnd="8dp">
+
+                        <com.google.android.material.textfield.TextInputEditText
+                            android:id="@+id/etWeight"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:inputType="numberDecimal" />
+
+                    </com.google.android.material.textfield.TextInputLayout>
+
+                    <com.google.android.material.button.MaterialButton
+                        android:id="@+id/btnLogWeight"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Log"
+                        android:textAllCaps="false"
+                        style="@style/Widget.Material3.Button" />
+
+                </LinearLayout>
+
+                <ProgressBar
+                    android:id="@+id/progressWeight"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_horizontal"
+                    android:visibility="gone" />
+
+                <com.github.mikephil.charting.charts.LineChart
+                    android:id="@+id/chartWeight"
+                    android:layout_width="match_parent"
+                    android:layout_height="200dp" />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:gravity="center"
+                    android:layout_marginTop="8dp">
+
+                    <View android:layout_width="16dp" android:layout_height="3dp" android:background="#4CAF50" android:layout_marginEnd="4dp" />
+                    <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Weight" android:textSize="12sp" android:layout_marginEnd="16dp" />
+
+                    <View android:layout_width="16dp" android:layout_height="3dp" android:background="#FF9800" android:layout_marginEnd="4dp" android:backgroundTint="#FF9800" />
+                    <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Target" android:textSize="12sp" />
 
                 </LinearLayout>
 

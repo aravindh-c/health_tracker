@@ -72,10 +72,10 @@ class NotificationHelper(private val context: Context) {
         val message = substitute(rawMessage, name, userId)
 
         val title = when (slotKey) {
-            "morning_motivation" -> "Good Morning!"
-            "meal_reminders" -> "Meal Reminder"
-            "snack_discipline" -> "Snack Time"
-            "evening_reflection" -> "Evening Check-in"
+            "morning_motivation" -> "Good Morning, $name!"
+            "meal_reminders"     -> "$name — time to eat!"
+            "snack_discipline"   -> "$name — snack check!"
+            "evening_reflection" -> "Evening check-in, $name"
             else -> "Health Track"
         }
 

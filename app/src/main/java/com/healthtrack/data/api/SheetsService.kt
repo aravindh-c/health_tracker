@@ -106,6 +106,36 @@ class SheetsService {
         }
     }
 
+    suspend fun logWeight(date: String, userId: String, weightKg: Double): Boolean {
+        return withContext(Dispatchers.IO) {
+            val body = JSONObject().apply {
+                put("action", "log_weight")
+                put("date", date)
+                put("user_id", userId)
+                put("weight_kg", weightKg)
+            }
+            post(body)
+        }
+    }
+
+    suspend fun getWeightHistory(userId: String): List<com.healthtrack.data.model.WeightEntry> {
+        return withContext(Dispatchers.IO) {
+            val url = "$APPS_SCRIPT_URL?action=weight_history&user_id=$userId"
+            val request = Request.Builder().url(url).get().build()
+            val response = client.newCall(request).execute()
+            val body = response.body?.string() ?: return@withContext emptyList()
+            val json = JSONObject(body)
+            val arr = json.optJSONArray("entries") ?: return@withContext emptyList()
+            (0 until arr.length()).map { i ->
+                val entry = arr.getJSONObject(i)
+                com.healthtrack.data.model.WeightEntry(
+                    date = entry.optString("date"),
+                    weight_kg = entry.optDouble("weight_kg", 0.0)
+                )
+            }
+        }
+    }
+
     private fun post(body: JSONObject): Boolean {
         val request = Request.Builder()
             .url(APPS_SCRIPT_URL)

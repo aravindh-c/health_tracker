@@ -17,12 +17,15 @@ import com.healthtrack.utils.FoodPreferenceManager
 import com.healthtrack.utils.ScoreCalculator
 import com.healthtrack.utils.SecurePrefs
 import com.healthtrack.utils.SuggestionMemory
+import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.async
 import kotlinx.coroutines.awaitAll
+import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import java.time.LocalDate
 import java.time.YearMonth
+import java.time.ZoneId
 
 class NutritionRepository(
     private val securePrefs: SecurePrefs,
@@ -31,6 +34,7 @@ class NutritionRepository(
     private val sheetsService = SheetsService()
     private val prefManager = FoodPreferenceManager(context)
     private val suggestionMemory = SuggestionMemory(context)
+    private val IST = ZoneId.of("Asia/Kolkata")
 
     private fun getLlmService(): LlmService {
         val key = securePrefs.getActiveApiKey()
@@ -45,14 +49,22 @@ class NutritionRepository(
         mealType: String,
         foodText: String,
         userProfile: UserProfile,
-        date: String = LocalDate.now().toString()
+        date: String = LocalDate.now(IST).toString()
     ): Result<MealLogResult> {
         return try {
+            // Gym burn: no LLM needed, log negative calories directly
+            if (mealType == "Gym Workout (Burn)") {
+                return logGymActivity(userId, foodText.toDoubleOrNull() ?: 0.0, date)
+            }
             val llm = getLlmService()
             sheetsService.logFood(date, userId, mealType, foodText)
             val nutrients = llm.estimateNutrients(foodText, userProfile)
             sheetsService.logNutrients(date, userId, mealType, nutrients)
             prefManager.trackFoodText(userId, foodText)
+            // Fire-and-forget: auto-add frequent new foods to preferences (LLM health check)
+            CoroutineScope(Dispatchers.IO).launch {
+                try { autoUpdateFoodPreferences(userProfile) } catch (_: Exception) {}
+            }
 
             // Fetch updated daily total then generate insights
             val todayTotal = try { sheetsService.getDailyReport(userId, date) } catch (e: Exception) { nutrients }
@@ -66,7 +78,7 @@ class NutritionRepository(
 
     suspend fun getDailyReport(userId: String): Result<NutrientData> {
         return try {
-            val data = sheetsService.getDailyReport(userId, LocalDate.now().toString())
+            val data = sheetsService.getDailyReport(userId, LocalDate.now(IST).toString())
             Result.success(data)
         } catch (e: Exception) {
             Result.failure(e)
@@ -75,7 +87,7 @@ class NutritionRepository(
 
     suspend fun getDailyScore(userId: String, userProfile: UserProfile): Result<DailyScore> {
         return try {
-            val consumed = sheetsService.getDailyReport(userId, LocalDate.now().toString())
+            val consumed = sheetsService.getDailyReport(userId, LocalDate.now(IST).toString())
             Result.success(ScoreCalculator.calculate(consumed, userProfile.targets))
         } catch (e: Exception) {
             Result.failure(e)
@@ -84,7 +96,7 @@ class NutritionRepository(
 
     suspend fun getFoodHistory(userId: String): Result<List<MealHistory>> {
         return try {
-            val history = sheetsService.getFoodHistory(userId, LocalDate.now().toString())
+            val history = sheetsService.getFoodHistory(userId, LocalDate.now(IST).toString())
             Result.success(history)
         } catch (e: Exception) {
             Result.failure(e)
@@ -117,7 +129,7 @@ class NutritionRepository(
     // ── Weekly averages: last 7 days, for LLM memory context ─────────────────
     suspend fun getWeeklyAverages(userId: String): NutrientData {
         return try {
-            val today = LocalDate.now()
+            val today = LocalDate.now(IST)
             val days = (0..6).map { today.minusDays(it.toLong()).toString() }
             val dailyData = withContext(Dispatchers.IO) {
                 days.map { date ->
@@ -143,9 +155,46 @@ class NutritionRepository(
         }
     }
 
+    suspend fun logGymActivity(
+        userId: String,
+        caloriesBurned: Double,
+        date: String = LocalDate.now(IST).toString()
+    ): Result<MealLogResult> {
+        return try {
+            if (caloriesBurned <= 0) return Result.failure(Exception("Enter calories burned as a positive number"))
+            val burnNutrients = NutrientData(calories_kcal = -caloriesBurned)
+            sheetsService.logNutrients(date, userId, "Gym Workout (Burn)", burnNutrients)
+            Result.success(MealLogResult(burnNutrients,
+                "Great! ${caloriesBurned.toInt()} kcal gym burn logged. Your net calories for today are adjusted."))
+        } catch (e: Exception) {
+            Result.failure(e)
+        }
+    }
+
+    suspend fun logWeight(
+        userId: String,
+        weightKg: Double,
+        date: String = LocalDate.now(IST).toString()
+    ): Result<Unit> {
+        return try {
+            sheetsService.logWeight(date, userId, weightKg)
+            Result.success(Unit)
+        } catch (e: Exception) {
+            Result.failure(e)
+        }
+    }
+
+    suspend fun getWeightHistory(userId: String): Result<List<com.healthtrack.data.model.WeightEntry>> {
+        return try {
+            Result.success(sheetsService.getWeightHistory(userId))
+        } catch (e: Exception) {
+            Result.failure(e)
+        }
+    }
+
     suspend fun getMealSuggestions(userId: String, userProfile: UserProfile): Result<String> {
         return try {
-            val today = LocalDate.now().toString()
+            val today = LocalDate.now(IST).toString()
             val consumed = sheetsService.getDailyReport(userId, today)
             val history = sheetsService.getFoodHistory(userId, today)
 

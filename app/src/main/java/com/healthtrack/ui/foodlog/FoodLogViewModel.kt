@@ -24,6 +24,9 @@ class FoodLogViewModel(
     private val _state = MutableLiveData<FoodLogState>(FoodLogState.Idle)
     val state: LiveData<FoodLogState> = _state
 
+    var lastResult: MealLogResult? = null
+        private set
+
     fun logMeal(mealType: String, foodText: String, date: String) {
         if (foodText.isBlank()) {
             _state.value = FoodLogState.Error("Please enter what you ate")
@@ -41,7 +44,10 @@ class FoodLogViewModel(
         viewModelScope.launch {
             val result = repository.logMeal(userId, mealType, foodText, profile, date)
             result.fold(
-                onSuccess = { r -> _state.value = FoodLogState.Success(r.nutrients, r.insights) },
+                onSuccess = { r ->
+                    lastResult = r
+                    _state.value = FoodLogState.Success(r.nutrients, r.insights)
+                },
                 onFailure = { e -> _state.value = FoodLogState.Error(e.message ?: "Unknown error") }
             )
         }

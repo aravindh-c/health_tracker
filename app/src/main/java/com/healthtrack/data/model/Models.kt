@@ -12,7 +12,10 @@ data class UserProfile(
     val targets: NutrientTargets,
     // Optional extra fields — Gson ignores unknown, these are passed to LLM for richer context
     val reported_symptoms: List<String>? = null,
-    val risk_flags: List<String>? = null
+    val risk_flags: List<String>? = null,
+    val weight_min_chart_kg: Double = 60.0,
+    val weight_max_chart_kg: Double = 100.0,
+    val weight_target_kg: Double? = null
 )
 
 data class NutrientTargets(
@@ -59,6 +62,7 @@ data class DailyScore(
 
 enum class MealType(val display: String) {
     GYM_PRE_WORKOUT("Gym Pre-Workout"),
+    GYM_WORKOUT_BURN("Gym Workout (Burn)"),
     BREAKFAST("Breakfast"),
     MID_DAY("Mid-Day"),
     LUNCH("Lunch"),
@@ -84,4 +88,9 @@ data class MealLogResult(
 data class DailyNutrientPoint(
     val date: String,          // "2026-03-08"
     val nutrients: NutrientData
+)
+
+data class WeightEntry(
+    val date: String,
+    val weight_kg: Double
 )

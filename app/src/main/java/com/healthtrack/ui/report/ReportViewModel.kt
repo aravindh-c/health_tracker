@@ -45,6 +45,12 @@ class ReportViewModel(
     private val _monthlyLoading = MutableLiveData(false)
     val monthlyLoading: LiveData<Boolean> = _monthlyLoading
 
+    private val _weightHistory = MutableLiveData<List<com.healthtrack.data.model.WeightEntry>>(emptyList())
+    val weightHistory: LiveData<List<com.healthtrack.data.model.WeightEntry>> = _weightHistory
+
+    private val _weightLoading = MutableLiveData(false)
+    val weightLoading: LiveData<Boolean> = _weightLoading
+
     fun load() {
         val p = profileManager.getProfile(userId) ?: return
         _profile.value = p
@@ -77,6 +83,25 @@ class ReportViewModel(
             } finally {
                 _monthlyLoading.value = false
             }
+        }
+    }
+
+    fun loadWeightHistory() {
+        _weightLoading.value = true
+        viewModelScope.launch {
+            try {
+                val result = repository.getWeightHistory(userId)
+                result.onSuccess { _weightHistory.value = it }
+            } finally {
+                _weightLoading.value = false
+            }
+        }
+    }
+
+    fun logWeight(weightKg: Double) {
+        viewModelScope.launch {
+            repository.logWeight(userId, weightKg)
+            loadWeightHistory()
         }
     }
 }

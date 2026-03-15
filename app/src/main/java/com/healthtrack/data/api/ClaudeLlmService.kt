@@ -107,11 +107,14 @@ Start with: "You need ~${remainingCal} kcal, ${remainingProtein}g protein, ${rem
 Suggestions MUST collectively cover these remaining needs.
 
 == Instructions ==
+- You MUST ONLY suggest foods explicitly listed in the Food Preferences JSON above (preferred_foods, protein_sources, carb_sources, snack_preferences, vegetable_choices, etc.)
+- Do NOT suggest foods not in the preferences list
+- Primary health priority for this user: ${userProfile.health_goals.firstOrNull() ?: "general health"}
 - Suggest ONE meal per remaining meal type above
 - Prefer south Indian / Indian home food style
 - Use the 7-day pattern to address recurring deficiencies
 - Do NOT repeat meals from "Avoid Repeating" section
-- Avoid foods worsening prediabetes, fatty liver, elevated uric acid, or kidney stones
+- Avoid foods worsening medical conditions: ${userProfile.medical_conditions.joinToString(", ")}
 - Format EXACTLY:
 
 **[Meal Type]: [Meal Name]**

@@ -19,7 +19,6 @@ import com.healthtrack.data.model.MealType
 import com.healthtrack.data.model.NutrientData
 import com.healthtrack.databinding.FragmentFoodLogBinding
 import com.healthtrack.ui.MainActivity
-import com.healthtrack.utils.NotificationHelper
 import com.healthtrack.utils.PopupMessageHelper
 import com.healthtrack.utils.SecurePrefs
 import com.healthtrack.utils.UserProfileManager
@@ -31,7 +30,7 @@ class FoodLogFragment : Fragment() {
     private var _binding: FragmentFoodLogBinding? = null
     private val binding get() = _binding!!
 
-    private var selectedDate: LocalDate = LocalDate.now()
+    private var selectedDate: LocalDate = LocalDate.now(java.time.ZoneId.of("Asia/Kolkata"))
     private val chipDateFormatter = DateTimeFormatter.ofPattern("d MMM")
 
     // Keep adapter as field so we can reset it after each log
@@ -64,6 +63,9 @@ class FoodLogFragment : Fragment() {
         binding.cardResult.visibility = View.GONE
         setupDateChips()
 
+        // Restore last logged result when navigating back to this tab
+        viewModel.lastResult?.let { showNutrientResult(it.nutrients, it.insights) }
+
         meals = MealType.displayList()
         mealAdapter = object : ArrayAdapter<String>(requireContext(), android.R.layout.simple_dropdown_item_1line, meals) {
             override fun getFilter(): Filter = object : Filter() {
@@ -74,6 +76,14 @@ class FoodLogFragment : Fragment() {
             }
         }
         resetMealDropdown()
+
+        binding.spinnerMeal.setOnItemClickListener { _, _, _, _ ->
+            val selected = binding.spinnerMeal.text.toString()
+            binding.etFoodText.hint = if (selected == com.healthtrack.data.model.MealType.GYM_WORKOUT_BURN.display)
+                "Calories burned (e.g. 300)"
+            else
+                "What did you eat?"
+        }
 
         binding.btnLog.setOnClickListener {
             val mealType = binding.spinnerMeal.text.toString()
@@ -98,10 +108,7 @@ class FoodLogFragment : Fragment() {
                     binding.btnLog.isEnabled = true
                     showNutrientResult(state.nutrients, state.insights)
                     showMotivationalPopup(state.nutrients)
-                    if (state.insights.isNotBlank()) {
-                        NotificationHelper(requireContext()).showMealInsight(state.insights)
-                    }
-                    viewModel.reset() // reset immediately — prevents re-trigger on tab re-navigation
+                    viewModel.reset()
                 }
                 is FoodLogState.Error -> {
                     binding.progressBar.visibility = View.GONE
@@ -115,11 +122,11 @@ class FoodLogFragment : Fragment() {
 
     private fun setupDateChips() {
         binding.chipToday.setOnClickListener {
-            selectedDate = LocalDate.now()
+            selectedDate = LocalDate.now(java.time.ZoneId.of("Asia/Kolkata"))
             binding.chipPickDate.text = "Pick date…"
         }
         binding.chipYesterday.setOnClickListener {
-            selectedDate = LocalDate.now().minusDays(1)
+            selectedDate = LocalDate.now(java.time.ZoneId.of("Asia/Kolkata")).minusDays(1)
             binding.chipPickDate.text = "Pick date…"
         }
         binding.chipPickDate.setOnClickListener {
@@ -135,11 +142,11 @@ class FoodLogFragment : Fragment() {
                 val picked = LocalDate.ofEpochDay(millis / 86_400_000L)
                 selectedDate = picked
                 when (picked) {
-                    LocalDate.now() -> {
+                    LocalDate.now(java.time.ZoneId.of("Asia/Kolkata")) -> {
                         binding.chipGroupDate.check(binding.chipToday.id)
                         binding.chipPickDate.text = "Pick date…"
                     }
-                    LocalDate.now().minusDays(1) -> {
+                    LocalDate.now(java.time.ZoneId.of("Asia/Kolkata")).minusDays(1) -> {
                         binding.chipGroupDate.check(binding.chipYesterday.id)
                         binding.chipPickDate.text = "Pick date…"
                     }
@@ -154,7 +161,7 @@ class FoodLogFragment : Fragment() {
                 if (binding.chipGroupDate.checkedChipId == binding.chipPickDate.id &&
                     binding.chipPickDate.text == "Pick date…") {
                     binding.chipGroupDate.check(binding.chipToday.id)
-                    selectedDate = LocalDate.now()
+                    selectedDate = LocalDate.now(java.time.ZoneId.of("Asia/Kolkata"))
                 }
             }
             picker.show(parentFragmentManager, "date_picker")
