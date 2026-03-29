@@ -256,6 +256,39 @@
                     android:textColor="@color/on_surface"
                     android:layout_marginBottom="12dp" />
 
+                <!-- Weight Date Selector -->
+                <com.google.android.material.chip.ChipGroup
+                    android:id="@+id/chipGroupWeightDate"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="12dp"
+                    app:singleSelection="true"
+                    app:selectionRequired="true">
+
+                    <com.google.android.material.chip.Chip
+                        android:id="@+id/chipWeightToday"
+                        style="@style/Widget.Material3.Chip.Filter"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Today"
+                        android:checked="true" />
+
+                    <com.google.android.material.chip.Chip
+                        android:id="@+id/chipWeightYesterday"
+                        style="@style/Widget.Material3.Chip.Filter"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Yesterday" />
+
+                    <com.google.android.material.chip.Chip
+                        android:id="@+id/chipWeightPickDate"
+                        style="@style/Widget.Material3.Chip.Filter"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Pick date…" />
+
+                </com.google.android.material.chip.ChipGroup>
+
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -267,7 +300,7 @@
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
-                        android:hint="Today's weight (kg)"
+                        android:hint="Weight (kg)"
                         style="@style/Widget.Material3.TextInputLayout.OutlinedBox"
                         android:layout_marginEnd="8dp">
 

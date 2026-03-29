@@ -11,6 +11,32 @@
         android:orientation="vertical"
         android:padding="16dp">
 
+        <!-- Log Mode Toggle -->
+        <com.google.android.material.chip.ChipGroup
+            android:id="@+id/chipGroupMode"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="12dp"
+            app:singleSelection="true"
+            app:selectionRequired="true">
+
+            <com.google.android.material.chip.Chip
+                android:id="@+id/chipModeSingle"
+                style="@style/Widget.Material3.Chip.Filter"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Single Meal"
+                android:checked="true" />
+
+            <com.google.android.material.chip.Chip
+                android:id="@+id/chipModeFullDay"
+                style="@style/Widget.Material3.Chip.Filter"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Full Day Log" />
+
+        </com.google.android.material.chip.ChipGroup>
+
         <!-- Date Selector -->
         <com.google.android.material.chip.ChipGroup
             android:id="@+id/chipGroupDate"
@@ -46,6 +72,7 @@
 
         <!-- Meal Type Selector -->
         <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/layoutMealType"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:hint="Meal Type"
@@ -62,6 +89,7 @@
 
         <!-- Food Text Input -->
         <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/layoutFoodText"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:hint="What did you eat?"

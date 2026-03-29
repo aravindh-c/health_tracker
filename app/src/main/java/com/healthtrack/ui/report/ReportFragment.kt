@@ -27,7 +27,12 @@ import com.healthtrack.databinding.FragmentReportBinding
 import com.healthtrack.ui.MainActivity
 import com.healthtrack.utils.SecurePrefs
 import com.healthtrack.utils.UserProfileManager
+import com.google.android.material.datepicker.CalendarConstraints
+import com.google.android.material.datepicker.DateValidatorPointBackward
+import com.google.android.material.datepicker.MaterialDatePicker
+import java.time.LocalDate
 import java.time.YearMonth
+import java.time.ZoneId
 import java.time.format.DateTimeFormatter
 import kotlin.math.roundToInt
 
@@ -51,6 +56,10 @@ class ReportFragment : Fragment() {
         }
     }
 
+    private val IST = ZoneId.of("Asia/Kolkata")
+    private val chipDateFormatter = DateTimeFormatter.ofPattern("d MMM")
+    private var selectedWeightDate: LocalDate = LocalDate.now(ZoneId.of("Asia/Kolkata"))
+
     private val monthOptions: List<YearMonth> by lazy {
         val now = YearMonth.now()
         (0..5).map { now.minusMonths(it.toLong()) }
@@ -67,6 +76,7 @@ class ReportFragment : Fragment() {
         setupNutrientChart()
         setupMonthlyChart()
         setupMonthPicker()
+        setupWeightDateChips()
 
         binding.btnRefresh.setOnClickListener { viewModel.load() }
 
@@ -116,7 +126,7 @@ class ReportFragment : Fragment() {
                 return@setOnClickListener
             }
             binding.etWeight.error = null
-            viewModel.logWeight(w)
+            viewModel.logWeight(w, selectedWeightDate.toString())
             binding.etWeight.setText("")
         }
 
@@ -124,6 +134,53 @@ class ReportFragment : Fragment() {
 
         viewModel.load()
         viewModel.loadMonthlyData(YearMonth.now())
+    }
+
+    private fun setupWeightDateChips() {
+        binding.chipWeightToday.setOnClickListener {
+            selectedWeightDate = LocalDate.now(IST)
+            binding.chipWeightPickDate.text = "Pick date…"
+        }
+        binding.chipWeightYesterday.setOnClickListener {
+            selectedWeightDate = LocalDate.now(IST).minusDays(1)
+            binding.chipWeightPickDate.text = "Pick date…"
+        }
+        binding.chipWeightPickDate.setOnClickListener {
+            val constraints = CalendarConstraints.Builder()
+                .setValidator(DateValidatorPointBackward.now())
+                .build()
+            val picker = MaterialDatePicker.Builder.datePicker()
+                .setTitleText("Select weight log date")
+                .setSelection(selectedWeightDate.toEpochDay() * 86_400_000L)
+                .setCalendarConstraints(constraints)
+                .build()
+            picker.addOnPositiveButtonClickListener { millis ->
+                val picked = LocalDate.ofEpochDay(millis / 86_400_000L)
+                selectedWeightDate = picked
+                when (picked) {
+                    LocalDate.now(IST) -> {
+                        binding.chipGroupWeightDate.check(binding.chipWeightToday.id)
+                        binding.chipWeightPickDate.text = "Pick date…"
+                    }
+                    LocalDate.now(IST).minusDays(1) -> {
+                        binding.chipGroupWeightDate.check(binding.chipWeightYesterday.id)
+                        binding.chipWeightPickDate.text = "Pick date…"
+                    }
+                    else -> {
+                        binding.chipWeightPickDate.text = picked.format(chipDateFormatter)
+                        binding.chipGroupWeightDate.check(binding.chipWeightPickDate.id)
+                    }
+                }
+            }
+            picker.addOnNegativeButtonClickListener {
+                if (binding.chipGroupWeightDate.checkedChipId == binding.chipWeightPickDate.id &&
+                    binding.chipWeightPickDate.text == "Pick date…") {
+                    binding.chipGroupWeightDate.check(binding.chipWeightToday.id)
+                    selectedWeightDate = LocalDate.now(IST)
+                }
+            }
+            picker.show(parentFragmentManager, "weight_date_picker")
+        }
     }
 
     private fun setupMonthPicker() {

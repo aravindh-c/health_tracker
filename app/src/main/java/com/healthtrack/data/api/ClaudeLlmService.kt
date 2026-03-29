@@ -23,8 +23,7 @@ class ClaudeLlmService(private val apiKey: String) : LlmService {
     override suspend fun estimateNutrients(foodText: String, userProfile: UserProfile): NutrientData {
         return withContext(Dispatchers.IO) {
             val prompt = """
-User medical context:
-${buildMedicalContext(userProfile)}
+Estimate the nutritional values for the food described below.
 
 Food eaten:
 $foodText

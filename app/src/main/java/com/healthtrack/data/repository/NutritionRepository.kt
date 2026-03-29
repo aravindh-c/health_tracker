@@ -155,6 +155,24 @@ class NutritionRepository(
         }
     }
 
+    // Full Day Log: single LLM call for all meals, no insights, no preferences tracking, no popup
+    suspend fun logFullDay(
+        userId: String,
+        foodText: String,
+        userProfile: UserProfile,
+        date: String = LocalDate.now(IST).toString()
+    ): Result<MealLogResult> {
+        return try {
+            val llm = getLlmService()
+            sheetsService.logFood(date, userId, "Full Day Log", foodText)
+            val nutrients = llm.estimateNutrients(foodText, userProfile)
+            sheetsService.logNutrients(date, userId, "Full Day Log", nutrients)
+            Result.success(MealLogResult(nutrients, ""))
+        } catch (e: Exception) {
+            Result.failure(e)
+        }
+    }
+
     suspend fun logGymActivity(
         userId: String,
         caloriesBurned: Double,

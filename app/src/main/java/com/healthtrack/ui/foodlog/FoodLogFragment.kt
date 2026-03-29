@@ -57,11 +57,14 @@ class FoodLogFragment : Fragment() {
         return binding.root
     }
 
+    private var isFullDayMode = false
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
         binding.cardResult.visibility = View.GONE
         setupDateChips()
+        setupModeChips()
 
         // Restore last logged result when navigating back to this tab
         viewModel.lastResult?.let { showNutrientResult(it.nutrients, it.insights) }
@@ -86,9 +89,13 @@ class FoodLogFragment : Fragment() {
         }
 
         binding.btnLog.setOnClickListener {
-            val mealType = binding.spinnerMeal.text.toString()
             val foodText = binding.etFoodText.text?.toString()?.trim() ?: ""
-            viewModel.logMeal(mealType, foodText, selectedDate.toString())
+            if (isFullDayMode) {
+                viewModel.logFullDay(foodText, selectedDate.toString())
+            } else {
+                val mealType = binding.spinnerMeal.text.toString()
+                viewModel.logMeal(mealType, foodText, selectedDate.toString())
+            }
         }
 
         viewModel.state.observe(viewLifecycleOwner) { state ->
@@ -107,7 +114,7 @@ class FoodLogFragment : Fragment() {
                     binding.progressBar.visibility = View.GONE
                     binding.btnLog.isEnabled = true
                     showNutrientResult(state.nutrients, state.insights)
-                    showMotivationalPopup(state.nutrients)
+                    if (!isFullDayMode) showMotivationalPopup(state.nutrients)
                     viewModel.reset()
                 }
                 is FoodLogState.Error -> {
@@ -118,6 +125,29 @@ class FoodLogFragment : Fragment() {
                 }
             }
         }
+    }
+
+    private fun setupModeChips() {
+        binding.chipModeSingle.setOnClickListener { setMode(fullDay = false) }
+        binding.chipModeFullDay.setOnClickListener { setMode(fullDay = true) }
+    }
+
+    private fun setMode(fullDay: Boolean) {
+        isFullDayMode = fullDay
+        if (fullDay) {
+            binding.layoutMealType.visibility = View.GONE
+            binding.layoutFoodText.hint = "Describe all meals (e.g. Breakfast: 2 idli with sambar. Lunch: rice, dal, chicken. Dinner: chapathi with egg curry)"
+            binding.layoutFoodText.helperText = "Include all meals and snacks for the day"
+            binding.btnLog.text = "Log Full Day"
+        } else {
+            binding.layoutMealType.visibility = View.VISIBLE
+            binding.layoutFoodText.hint = "What did you eat?"
+            binding.layoutFoodText.helperText = "e.g. 2 idli + small omelette + little rice"
+            binding.btnLog.text = "Estimate & Log Nutrients"
+            resetMealDropdown()
+        }
+        binding.etFoodText.setText("")
+        binding.cardResult.visibility = View.GONE
     }
 
     private fun setupDateChips() {

@@ -23,13 +23,21 @@ class OpenAiLlmService(private val apiKey: String) : LlmService {
     override suspend fun estimateNutrients(foodText: String, userProfile: UserProfile): NutrientData {
         return withContext(Dispatchers.IO) {
             val prompt = """
-User medical context:
-${buildMedicalContext(userProfile)}
+Estimate the nutritional values for the food described below.
 
 Food eaten:
 $foodText
 
-Estimate the nutrients. Return ONLY valid JSON, no extra text:
+Rules:
+1. Interpret natural descriptions like "little rice", "small bowl", "2 idli", etc.
+2. Estimate reasonable portion sizes if exact quantity is missing.
+3. Classify carbohydrates as:
+   - carbs_simple_g: sugars or rapidly absorbed carbs (fruit sugars, added sugar, sweets).
+   - carbs_complex_g: starch-based carbs such as rice, wheat, oats, millets, lentils, idli, dosa, chapathi.
+4. Fiber should represent dietary fiber from grains, vegetables, legumes, etc.
+5. If food contains both types of carbs, split values accordingly.
+
+Return ONLY valid JSON, no extra text:
 {
   "protein_g": <number>,
   "fat_g": <number>,

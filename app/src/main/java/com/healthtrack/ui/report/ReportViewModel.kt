@@ -98,9 +98,9 @@ class ReportViewModel(
         }
     }
 
-    fun logWeight(weightKg: Double) {
+    fun logWeight(weightKg: Double, date: String) {
         viewModelScope.launch {
-            repository.logWeight(userId, weightKg)
+            repository.logWeight(userId, weightKg, date)
             loadWeightHistory()
         }
     }

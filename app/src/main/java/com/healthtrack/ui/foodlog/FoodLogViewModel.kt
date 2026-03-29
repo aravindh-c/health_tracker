@@ -53,6 +53,28 @@ class FoodLogViewModel(
         }
     }
 
+    fun logFullDay(foodText: String, date: String) {
+        if (foodText.isBlank()) {
+            _state.value = FoodLogState.Error("Please describe your day's meals")
+            return
+        }
+        val profile = profileManager.getProfile(userId) ?: run {
+            _state.value = FoodLogState.Error("User profile not found")
+            return
+        }
+        _state.value = FoodLogState.Loading
+        viewModelScope.launch {
+            val result = repository.logFullDay(userId, foodText, profile, date)
+            result.fold(
+                onSuccess = { r ->
+                    lastResult = r
+                    _state.value = FoodLogState.Success(r.nutrients, r.insights)
+                },
+                onFailure = { e -> _state.value = FoodLogState.Error(e.message ?: "Unknown error") }
+            )
+        }
+    }
+
     fun reset() {
         _state.value = FoodLogState.Idle
     }
